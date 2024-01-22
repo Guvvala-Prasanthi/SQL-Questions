@@ -1,0 +1,135 @@
+use file1;
+select*from [dbo].['Raw Data$']; 
+
+------------------INTRODUCTION TO SQL AND RELATIONAL DATABASES------------------------------------------------------------------------------------------------
+
+insert into [dbo].['Raw Data$']([Retailer Name],[Year],[Week],[Manufacturer],[Sector],[Category],[Brand],[POS $ Sales],[POS Unit Sales],[Shelf Price],[Inventory Units On Hand])
+values('prasanthi','2019','2019-11-28 00:00:00.000','acme corp','home care','air care','me nakatomi','567.8734','14.0932145834912','3.5432','100.629150022842');
+select*from [dbo].['Raw Data$'] where [Retailer Name] ='prasanthi';
+
+update  [dbo].['Raw Data$'] set[Retailer Name]='prasanthi' where Year=2019;
+select*from [dbo].['Raw Data$']
+
+delete from [dbo].['Raw Data$']  where [Shelf Price]  is null;
+select*from  [dbo].['Raw Data$']
+
+----------------FILTERING SORTING---------------------------------------------------------------------------------------------------------
+SELECT*FROM [dbo].['Raw Data$'] where[POS $ Sales] <1000
+
+select*from [dbo].['Raw Data$'] 
+order by [Retailer Name],[Category] asc;
+select*from [dbo].['Raw Data$'] 
+order by [Retailer Name],[Category] desc;
+
+select count(*) from [dbo].['Raw Data$'] as length
+
+
+--------------------------------AGGREGATING DATA-------------------------------------------------------------------------------------------
+select avg([Shelf Price]) from [dbo].['Raw Data$'] 
+
+select max([Shelf Price]) from [dbo].['Raw Data$'] 
+
+select sum([POS Unit Sales]*[Shelf Price] )as Revenue
+from [dbo].['Raw Data$'] 
+
+---------------------------ADVANCED FILTERING AND SORTING-----------------------------------------------------------------------------------------------
+select*from [dbo].['Raw Data$'] where[Shelf Price] <5
+select*from [dbo].['Raw Data$'] where [Shelf Price]>5
+
+select*from [dbo].['Raw Data$'] where[POS Unit Sales]  between 50 and 70
+
+select*from [dbo].['Raw Data$'] where[Shelf Price] not in('1000','98')
+
+ select*from [dbo].['Raw Data$'] where [Retailer Name] like 's%';
+
+ select*from [dbo].['Raw Data$'] where [Manufacturer] like '%very big corp%';
+
+ SELECT*FROM [dbo].['Raw Data$']
+ ORDER BY [POS Unit Sales]  DESC;
+ SELECT*FROM [dbo].['Raw Data$']
+ ORDER BY[POS $ Sales]  asc;
+
+----------------WORKING WITH FUNCTIONS------------------------------------------------------------------------------------------------------------------
+select getdate()
+
+select upper([Retailer Name])from [dbo].['Raw Data$'] 
+select lower([Retailer Name])from [dbo].['Raw Data$']  
+
+SELECT [Shelf Price] * 0.10 AS discount,
+    [Shelf Price] - ([Shelf Price]* 0.10) AS discounted_price
+FROM [dbo].['Raw Data$'] ;
+
+------------------SUBQUERIES----------------------------------------------------------------------------------------------------------------------------
+
+SELECT [Retailer Name],[Brand], (SELECT MAX([Shelf Price]) FROM [dbo].['Raw Data$'] ) AS max_salary
+FROM [dbo].['Raw Data$'];
+
+SELECT [Week],[Brand], (SELECT Min([Inventory Units On Hand]) FROM [dbo].['Raw Data$'] ) AS max_salary
+FROM [dbo].['Raw Data$'];
+
+SELECT [Retailer Name] , COUNT(*) AS product_count
+FROM  [dbo].['Raw Data$']
+GROUP BY [Retailer Name]
+HAVING COUNT(*) > 10;
+
+-------------------------------ADVANCED FILTERING AND SORTING-------------------------------------------------------------------------------------------
+  select*from [dbo].['Raw Data$'] where[Sector]  like 'H%';
+
+  select*from [dbo].['Raw Data$']  where [Retailer Name]  like '%Super%';
+
+ SELECT*FROM [dbo].['Raw Data$']
+ ORDER BY  [Shelf Price] DESC;
+
+ SELECT*FROM [dbo].['Raw Data$']
+ ORDER BY [Shelf Price]  asc;
+
+ --------------------AGGREGATIONS AND GROUPING------------------------------------------------------------------------------------------------------------
+
+ SELECT [POS $ Sales],[Shelf Price],[Inventory Units On Hand], sum([POS Unit Sales]) as sum_units
+ from  [dbo].['Raw Data$']
+ group BY [POS $ Sales],[Shelf Price],[Inventory Units On Hand];
+
+select avg([Shelf Price]) from  [dbo].['Raw Data$']
+
+select max([POS $ Sales])  from  [dbo].['Raw Data$']
+
+select min([POS Unit Sales])  from  [dbo].['Raw Data$']
+
+----------------------JOINS----------------------------------------------------------------------------------------------------------------
+select a.[Retailer Name],a.[Brand],b.[POS Unit Sales],b.[Shelf Price]
+from [dbo].['Raw Data$'] a
+inner join [dbo].['Raw Data$'] b on a.[POS Unit Sales] = b.[POS Unit Sales]
+where b.[POS $ Sales]<=10;
+
+SELECT [dbo].[Raw Data$].[Retailer Name],[dbo].[Raw Data$].[Brand],[dbo].[raw data 1].[POS Unit Sales],[dbo].[Raw Data$].[Shelf Price]
+FROM [dbo].[Raw Data$]
+LEFT JOIN [dbo].[raw data 1]
+ON [dbo].[Raw Data$].[Retailer Name] = [dbo].[raw data 1].[Retailer Name];
+
+SELECT [dbo].[Raw Data$].[Retailer Name],[dbo].[Raw Data$].[Brand],[dbo].[raw data 1].[POS Unit Sales],[dbo].[Raw Data$].[Shelf Price]
+FROM [dbo].[Raw Data$]
+right join [dbo].[raw data 1]
+ON [dbo].[Raw Data$].[Retailer Name] = [dbo].[raw data 1].[Retailer Name];
+
+-----------------------ADVANCED SQL FUNCTIONS----------------------------------------------------------------------------------------------------------
+
+SELECT [Shelf Price],[Week],[Brand],
+    SUM([Shelf Price]) OVER (PARTITION BY [Week] ORDER BY[Shelf Price] ) AS cumulative_sales
+FROM [dbo].['Raw Data$']
+ORDER BY [Week],[Shelf Price];
+
+insert into [dbo].['Raw Data$']([Retailer Name],[Year],[Week],[Manufacturer],[Sector],[Category],[Brand],[POS $ Sales],[POS Unit Sales],[Shelf Price],[Inventory Units On Hand])
+values('pavan','2018','2020-11-28 00:00:00.000','acme corp','home care','air care','me nakatomi','537.8734','10.0932145834912','8.5432','120.629150022842');
+select*from [dbo].['Raw Data$'] where [Retailer Name] ='pavan';
+
+--------------------MODIFYING TABLE-------------------------------------------------------------------------------------------------------------------------
+
+ EXEC sp_rename '[dbo].[Raw Data$]', '[new_[dbo].[Raw Data$]]';
+ select*from [dbo].[[new_[dbo]].[Raw Data$]]]]];
+
+ delete from [dbo].[[new_[dbo]].[Raw Data$]]]]] where[Shelf Price] ='2.3115';
+ select*From [dbo].[[new_[dbo]].[Raw Data$]]]]];
+
+ ALTER TABLE [dbo].[[new_[dbo]].[Raw Data$]]]]]
+ ALTER COLUMN [Week] DATE;
+ select*from[dbo].[[new_[dbo]].[Raw Data$]]]]];
